@@ -1,0 +1,20 @@
+services:
+  api:
+    build: .
+    image: tree-determination-api:latest
+    container_name: tree-determination-api
+    ports:
+      - "8000:8000"
+    environment:
+      DET_DB_PATH: /data/determinations.db
+    volumes:
+      - det-data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  det-data:
